@@ -7,6 +7,7 @@ package main;
 import java.util.*;
 import java.io.*;
 import java.sql.*;
+import Validator.ClienteValidator;
 /**
  *
  * @author Xavier
@@ -25,13 +26,16 @@ public class GestorPedidos
     }
     
     public void procesarPedido(String nombreCliente, String emailCliente,List<String> nombresProductos,List<Double> preciosProductos,List<Integer> cantidades,String tipoCliente) {
-        if (nombreCliente == null || nombreCliente.trim().isEmpty()) {
-        System.out.println("Error: nombre de cliente invalido");
-        return;
+        ClienteValidator validator = new ClienteValidator();
+
+        if (!validator.validarNombre(nombreCliente)) {
+            System.out.println("Error: nombre de cliente invalido");
+            return;
         }
-        if (emailCliente == null || !emailCliente.contains("@")) {
-        System.out.println("Error: email invalido");
-        return;
+
+        if (!validator.validarEmail(emailCliente)) {
+            System.out.println("Error: email invalido");
+            return;
         }
         double subtotal = 0;
         for (int i = 0; i < nombresProductos.size(); i++) {
@@ -82,13 +86,16 @@ public class GestorPedidos
     }
     
     public void cancelarPedido(String nombreCliente, String emailCliente, int idPedido) {
-        if (nombreCliente == null || nombreCliente.trim().isEmpty()) {
-        System.out.println("Error: nombre de cliente invalido");
-        return;
+        ClienteValidator validator = new ClienteValidator();
+
+        if (!validator.validarNombre(nombreCliente)) {
+            System.out.println("Error: nombre de cliente invalido");
+            return;
         }
-        if (emailCliente == null || !emailCliente.contains("@")) {
-        System.out.println("Error: email invalido");
-        return;
+
+        if (!validator.validarEmail(emailCliente)) {
+            System.out.println("Error: email invalido");
+            return;
         }
         try {
         Statement stmt = conexionBD.createStatement();
