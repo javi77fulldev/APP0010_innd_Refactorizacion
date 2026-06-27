@@ -10,6 +10,12 @@ import java.sql.*;
 import Validator.ClienteValidator;
 import descuentos.DescuentoStrategy;
 import descuentos.VipStrategy;
+import Calcular.CalculadoraPedido;
+import Repository.PedidoRepository;
+import Service.FacturaService;
+import Service.EmailService;
+import Service.LoggerService;
+import Service.ConexionDB;
 /**
  *
  * @author Xavier
@@ -17,15 +23,25 @@ import descuentos.VipStrategy;
 public class GestorPedidos 
 {
     private Connection conexionBD;
-    
+    private ConexionDB ConexionBD;
+    private ClienteValidator validator;
+    private CalculadoraPedido calculadora;
+    private PedidoRepository repository;
+    private FacturaService facturaService;
+    private EmailService emailService;
+    private LoggerService loggerService;
+
     public GestorPedidos() {
-        try {
-        this.conexionBD = DriverManager.getConnection(
-        "jdbc:mysql://localhost:3306/tienda", "root", "admin123");
-        } catch (SQLException e) {
-        e.printStackTrace();
-        }
-    }
+
+        Connection conexion = ConexionBD.obtenerConexion();
+        validator = new ClienteValidator();
+        calculadora = new CalculadoraPedido();
+        repository = new PedidoRepository(conexion);
+        facturaService = new FacturaService();
+        emailService = new EmailService();
+        loggerService = new LoggerService();
+
+    }            
     
     public void procesarPedido(String nombreCliente, String emailCliente,List<String> nombresProductos,List<Double> preciosProductos,List<Integer> cantidades,String tipoCliente) {
         ClienteValidator validator = new ClienteValidator();
