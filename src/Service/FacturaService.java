@@ -5,13 +5,55 @@
 package Service;
 
 import java.util.List;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
 /**
  *
  * @author Xavier
  */
 public class FacturaService {
-    public void generarFactura(String cliente,List<String> productos,List<Double> precios,List<Integer> cantidades,double subtotal,double descuento,double impuesto,double total) {
-       
+    public void generarFactura(String cliente,
+            List<String> productos,
+            List<Double> precios,
+            List<Integer> cantidades,
+            double subtotal,
+            double descuento,
+            double impuesto,
+            double total) {
+
+        try {
+
+            FileWriter writer =
+                    new FileWriter("factura_" + cliente + ".txt");
+
+            writer.write("FACTURA\n");
+            writer.write("Cliente: " + cliente + "\n");
+
+            for (int i = 0; i < productos.size(); i++) {
+
+                writer.write(productos.get(i)
+                        + " x"
+                        + cantidades.get(i)
+                        + " = $"
+                        + (precios.get(i) * cantidades.get(i))
+                        + "\n");
+
+            }
+
+            writer.write("Subtotal: $" + subtotal + "\n");
+            writer.write("Descuento: $" + descuento + "\n");
+            writer.write("Impuesto: $" + impuesto + "\n");
+            writer.write("TOTAL: $" + total + "\n");
+
+            writer.close();
+
+        } catch (IOException e) {
+
+            System.out.println("Error al generar factura: "
+                    + e.getMessage());
+
+        }
 
     }
 }

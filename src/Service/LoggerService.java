@@ -9,7 +9,15 @@ package Service;
  * @author Xavier
  */
 public class LoggerService {
-    public void registrarPedido(String cliente,double total) {        
+    public void registrarPedido(String cliente,
+            double total) {
+
+        System.out.println(
+                "[LOG] Pedido procesado para "
+                + cliente
+                + " - Total: "
+                + total);
 
     }
+
 }
